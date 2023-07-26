@@ -72,7 +72,7 @@ def main():
                         options.append(combined_word_cleaned)
 
             # Selector para elegir una palabra o combinación de palabras de la oración
-            selected_option = col1.selectbox("Selecciona una palabra o combinación de palabras:", options)
+            selected_option = col1.selectbox("Selecciona una palabra o combinación de palabras:", options, key=i)
 
             # Comprobar si se seleccionó una opción antes de buscar en la base de datos
             if selected_option is not None:
