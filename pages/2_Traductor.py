@@ -19,7 +19,7 @@ def remove_punctuation(word):
 def main():
     st.set_page_config(layout="wide")  # Set the app to display in wide mode
 
-    st.title("Aplicación de Streamlit para separar oraciones y buscar palabras")
+    st.title("Traductor")
     st.markdown("---")
 
     # Configurar la conexión a MySQL (modifica los detalles según tu caso)
@@ -73,16 +73,18 @@ def main():
 
             # Selector para elegir una palabra o combinación de palabras de la oración
             selected_option = col1.selectbox("Selecciona una palabra o combinación de palabras:", options)
-            
-            # Buscar coincidencias en la base de datos y mostrar las traducciones
-            translations = []
-            if selected_option.lower() in word_data:
-                translations.append(word_data[selected_option.lower()])
 
-            col1.success("Traducciones encontradas:")
-            for translation in translations:
-                col1.write(translation)
-            col1.markdown('----')
+            # Comprobar si se seleccionó una opción antes de buscar en la base de datos
+            if selected_option is not None:
+                # Buscar coincidencias en la base de datos y mostrar las traducciones
+                translations = []
+                if selected_option.lower() in word_data:
+                    translations.append(word_data[selected_option.lower()])
+
+                col1.success("Traducciones encontradas:")
+                for translation in translations:
+                    col1.write(translation)
+                col1.markdown('----')
 
     # Cerramos la conexión a la base de datos
     conn.close()
