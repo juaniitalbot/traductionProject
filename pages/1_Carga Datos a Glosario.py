@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 import pyodbc
-import xlrd
 import io
 
 # Configura la página
