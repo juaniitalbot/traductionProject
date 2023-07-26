@@ -1,7 +1,8 @@
+import pandas as pd
 import streamlit as st
 from docx import Document
 import re
-import pyodbc
+import mysql.connector
 from itertools import combinations
 import base64
 
@@ -21,15 +22,17 @@ def main():
     st.title("Aplicación de Streamlit para separar oraciones y buscar palabras")
     st.markdown("---")
 
-    # Conexión a la base de datos SQL Server (modifica los detalles según tu caso)
-    server = 'JTALBOT-NOTEBOO\SQLEXPRESS'
-    database = 'db'
-    conn = pyodbc.connect(f'DRIVER=ODBC Driver 17 for SQL Server;SERVER={server};DATABASE={database};Trusted_Connection=yes;')
+    # Configurar la conexión a MySQL (modifica los detalles según tu caso)
+    host = 'talbot.com.ar'
+    user = 'talbot_tradusr'
+    password = '3jV5tDTT'
+    database = 'talbot_tradprj'
+    conn = mysql.connector.connect(host=host, user=user, password=password, database=database)
     c = conn.cursor()
 
     # Cargar la base de datos de palabras en español e inglés
     word_data = {}  # Diccionario para almacenar los datos de palabras
-    c.execute('SELECT spanish, english FROM dbo.glosario')
+    c.execute('SELECT spanish, english FROM glosario')
     for row in c.fetchall():
         spanish, english = row
         word_data[english.lower()] = spanish  # Convertimos las palabras en inglés a minúsculas como clave para buscar en el diccionario
@@ -104,4 +107,3 @@ def get_binary_file_downloader_html(bin_file, file_label='File'):
 
 if __name__ == "__main__":
     main()
-
