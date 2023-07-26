@@ -1,4 +1,5 @@
 openpyxl
+mysql-connector-python
 mysql_connector_repackaged==0.3.1
 pandas==2.0.3
 pyodbc==4.0.39
