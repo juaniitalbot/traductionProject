@@ -11,14 +11,12 @@ st.set_page_config(
 )
 
 # Configurar la conexión a Firebase
-# Configurar la conexión a Firebase
 cred = credentials.Certificate("traductionproject-efb4b-firebase-adminsdk-ms2w0-a9b0b2055d.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://traductionproject-efb4b-default-rtdb.firebaseio.com/'
 })
 
-
-# Función para insertar DataFrame en la colección "glosario" de MongoDB
+# Función para insertar DataFrame en la colección "glosario" de Firebase
 def insert_dataframe_to_db(dataframe):
     try:
         # Accede a la base de datos de Firebase
@@ -40,7 +38,7 @@ def insert_dataframe_to_db(dataframe):
 
 
 # Streamlit
-st.title("Carga de datos en la colección 'glosario' de MongoDB")
+st.title("Carga de datos en la colección 'glosario' de Firebase")
 
 # Widget para cargar el archivo Excel
 file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
