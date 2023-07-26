@@ -12,10 +12,7 @@ st.set_page_config(
 
 # Configurar la conexión a Firebase
 cred = credentials.Certificate("traductionproject-efb4b-firebase-adminsdk-ms2w0-a9b0b2055d.json")
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://traductionproject-efb4b-default-rtdb.firebaseio.com/'
-})
-
+firebase_admin.initialize_app(cred)
 # Función para insertar DataFrame en la colección "glosario" de Firebase
 def insert_dataframe_to_db(dataframe):
     try:
