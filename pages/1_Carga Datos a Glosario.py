@@ -1,8 +1,9 @@
 import pandas as pd
 import streamlit as st
 import pyodbc
+import base64
 
-# Configura la pagina
+# Configura la página
 st.set_page_config(
     page_title="Inicio",
     page_icon="🏡",
@@ -55,24 +56,21 @@ def insert_dataframe_to_db(dataframe):
 st.title("Carga de datos en la tabla 'dbo.glosario'")
 
 # Widget para cargar el archivo Excel
-file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
+uploaded_file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
 
-if file:
+if uploaded_file is not None:
     try:
         # Leer el archivo Excel en un DataFrame
-        df_excel = pd.read_excel(file, engine='xlrd')
+        df_excel = pd.read_excel(uploaded_file, engine='openpyxl')
 
         # Mostrar el DataFrame cargado en Streamlit
         st.write("Datos cargados desde el archivo Excel:")
         st.write(df_excel)
-
-        
 
         # Botón para insertar el DataFrame en la tabla "dbo.glosario"
         if st.button("Insertar en la tabla 'dbo.glosario'"):
             insert_dataframe_to_db(df_excel)
     except Exception as e:
         st.write("Error al leer el archivo Excel:", e)
-
 
 st.write()
