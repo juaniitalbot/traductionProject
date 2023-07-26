@@ -2,7 +2,6 @@ import pandas as pd
 import streamlit as st
 import pyodbc
 
-
 # Configura la pagina
 st.set_page_config(
     page_title="Inicio",
@@ -61,7 +60,7 @@ file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
 if file:
     try:
         # Leer el archivo Excel en un DataFrame
-        df_excel = pd.read_excel(file)
+        df_excel = pd.read_excel(file, engine='xlrd')
 
         # Mostrar el DataFrame cargado en Streamlit
         st.write("Datos cargados desde el archivo Excel:")
