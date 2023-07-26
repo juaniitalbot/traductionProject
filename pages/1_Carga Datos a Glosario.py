@@ -1,7 +1,8 @@
 import pandas as pd
 import streamlit as st
 import pyodbc
-import base64
+import xlrd
+import io
 
 # Configura la página
 st.set_page_config(
@@ -60,8 +61,9 @@ uploaded_file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
 
 if uploaded_file is not None:
     try:
-        # Leer el archivo Excel en un DataFrame
-        df_excel = pd.read_excel(uploaded_file, engine='openpyxl')
+        # Leer el archivo Excel en un DataFrame utilizando xlrd
+        with io.BytesIO(uploaded_file.read()) as buffer:
+            df_excel = pd.read_excel(buffer, engine='xlrd')
 
         # Mostrar el DataFrame cargado en Streamlit
         st.write("Datos cargados desde el archivo Excel:")
