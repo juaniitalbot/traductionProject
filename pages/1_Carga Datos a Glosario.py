@@ -60,7 +60,7 @@ uploaded_file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
 
 if uploaded_file is not None:
     try:
-        # Leer el archivo Excel en un DataFrame utilizando xlrd
+        # Leer el archivo Excel en un DataFrame
         with io.BytesIO(uploaded_file.read()) as buffer:
             df_excel = pd.read_excel(buffer, engine='xlrd')
 
@@ -75,3 +75,4 @@ if uploaded_file is not None:
         st.write("Error al leer el archivo Excel:", e)
 
 st.write()
+
