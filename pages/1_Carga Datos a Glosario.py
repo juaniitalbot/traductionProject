@@ -11,7 +11,7 @@ st.set_page_config(
 
 # Configurar la conexión a MySQL
 # Reemplaza los valores con tus credenciales de MySQL
-host = 'talbot.com.ar'
+host = 'mm90.hosting-ar.com'
 user = 'talbot_tradusr'
 password = '3jV5tDTT'
 database_name = 'talbot_tradprj'

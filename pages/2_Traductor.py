@@ -23,7 +23,7 @@ def main():
     st.markdown("---")
 
     # Configurar la conexión a MySQL (modifica los detalles según tu caso)
-    host = 'talbot.com.ar'
+    host = 'mm90.hosting-ar.com'
     user = 'talbot_tradusr'
     password = '3jV5tDTT'
     database = 'talbot_tradprj'
