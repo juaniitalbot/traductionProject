@@ -1,58 +1,46 @@
 import pandas as pd
 import streamlit as st
-import pyodbc
+import firebase_admin
+from firebase_admin import credentials, db
 
-# Configura la pagina
+# Configura la página
 st.set_page_config(
     page_title="Inicio",
     page_icon="🏡",
     layout='wide'
 )
 
-# Conexion Database
-server = 'JTALBOT-NOTEBOO\SQLEXPRESS'
-database = 'db'
-connection_string = f'DRIVER=ODBC Driver 17 for SQL Server;SERVER={server};DATABASE={database};Trusted_Connection=yes;'
+# Configurar la conexión a Firebase
+# Configurar la conexión a Firebase
+cred = credentials.Certificate("C:\Users\juani\OneDrive\Desktop\traductionProject\traductionproject-efb4b-default-rtdb-export.json")
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://traductionproject-efb4b-default-rtdb.firebaseio.com/'
+})
 
-# Función para insertar DataFrame en la tabla "dbo.glosario" de la base de datos
+
+# Función para insertar DataFrame en la colección "glosario" de MongoDB
 def insert_dataframe_to_db(dataframe):
     try:
-        # Conexión a la base de datos
-        connection = pyodbc.connect(connection_string)
+        # Accede a la base de datos de Firebase
+        ref = db.reference('/glosario')  # 'glosario' es el nombre de la colección
 
-        # Crear un cursor para ejecutar la consulta de inserción
-        cursor = connection.cursor()
+        # Inserta cada fila del DataFrame en la colección
+        for _, row in dataframe.iterrows():
+            data = {
+                'tag': str(row['tag']),
+                'english': str(row['english']),
+                'spanish': str(row['spanish']),
+                'comment': str(row['comment'])
+            }
+            ref.push(data)
 
-        # Iterar sobre cada fila del DataFrame y realizar la inserción en la tabla
-        for index, row in dataframe.iterrows():
-            st.write(row['spanish'])
-            if pd.isna(row['tag']):
-                tag = ''
-            else:
-                tag = row['tag']
-            
-            if pd.isna(row['comment']):
-                comment = ''
-            else:
-                comment = row['comment']
-
-            if row['english'] != '' and row['spanish'] != '':
-                cursor.execute(
-                    "INSERT INTO dbo.glosario (tag, english, spanish, comment) VALUES (?, ?, ?, ?)",
-                    tag, row['english'], row['spanish'], comment
-                )
-
-        # Confirmar los cambios y cerrar el cursor y la conexión
-        connection.commit()
-        cursor.close()
-        connection.close()
-
-        st.success("Datos insertados correctamente en la tabla 'dbo.glosario'.")
+        st.success("Datos insertados correctamente en la colección 'glosario'.")
     except Exception as e:
         st.write("Error al insertar datos en la base de datos:", e)
 
+
 # Streamlit
-st.title("Carga de datos en la tabla 'dbo.glosario'")
+st.title("Carga de datos en la colección 'glosario' de MongoDB")
 
 # Widget para cargar el archivo Excel
 file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
@@ -66,13 +54,8 @@ if file:
         st.write("Datos cargados desde el archivo Excel:")
         st.write(df_excel)
 
-        
-
-        # Botón para insertar el DataFrame en la tabla "dbo.glosario"
-        if st.button("Insertar en la tabla 'dbo.glosario'"):
+        # Botón para insertar el DataFrame en la colección "glosario"
+        if st.button("Insertar en la colección 'glosario'"):
             insert_dataframe_to_db(df_excel)
     except Exception as e:
         st.write("Error al leer el archivo Excel:", e)
-
-
-st.write()
