@@ -1,5 +1,5 @@
 openpyxl
-firebase_admin==6.2.0
+mysql_connector_repackaged==0.3.1
 pandas==2.0.3
 pyodbc==4.0.39
 python_docx==0.8.11
