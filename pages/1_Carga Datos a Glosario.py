@@ -12,7 +12,7 @@ st.set_page_config(
 
 # Configurar la conexión a Firebase
 # Configurar la conexión a Firebase
-cred = credentials.Certificate("C:/Users/juani/OneDrive/Desktop/traductionProject/traductionproject-efb4b-default-rtdb-export.json")
+cred = credentials.Certificate("traductionproject-efb4b-default-rtdb-export.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://traductionproject-efb4b-default-rtdb.firebaseio.com/'
 })
