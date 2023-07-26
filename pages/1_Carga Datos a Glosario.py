@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
-import firebase_admin
-from firebase_admin import credentials, db
+import mysql.connector
 
 # Configura la página
 st.set_page_config(
@@ -10,32 +9,50 @@ st.set_page_config(
     layout='wide'
 )
 
-# Configurar la conexión a Firebase
-cred = credentials.Certificate("traductionproject-efb4b-firebase-adminsdk-ms2w0-a9b0b2055d.json")
-firebase_admin.initialize_app(cred)
-# Función para insertar DataFrame en la colección "glosario" de Firebase
+# Configurar la conexión a MySQL
+# Reemplaza los valores con tus credenciales de MySQL
+host = 'talbot.com.ar'
+user = 'talbot_tradusr'
+password = '3jV5tDTT'
+database_name = 'talbot_tradprj'
+
+# Función para insertar DataFrame en la tabla "glosario" de MySQL
 def insert_dataframe_to_db(dataframe):
     try:
-        # Accede a la base de datos de Firebase
-        ref = db.reference('/glosario')  # 'glosario' es el nombre de la colección
+        # Conexión a MySQL
+        connection = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database_name
+        )
 
-        # Inserta cada fila del DataFrame en la colección
+        # Crear un cursor para ejecutar la consulta de inserción
+        cursor = connection.cursor()
+
+        # Iterar sobre cada fila del DataFrame y realizar la inserción en la tabla
         for _, row in dataframe.iterrows():
-            data = {
-                'tag': str(row['tag']),
-                'english': str(row['english']),
-                'spanish': str(row['spanish']),
-                'comment': str(row['comment'])
-            }
-            ref.push(data)
+            tag = str(row['tag'])
+            english = str(row['english'])
+            spanish = str(row['spanish'])
+            comment = str(row['comment'])
 
-        st.success("Datos insertados correctamente en la colección 'glosario'.")
+            # Ejecutar la consulta de inserción
+            query = "INSERT INTO glosario (tag, english, spanish, comment) VALUES (%s, %s, %s, %s)"
+            values = (tag, english, spanish, comment)
+            cursor.execute(query, values)
+
+        # Confirmar los cambios y cerrar el cursor y la conexión
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        st.success("Datos insertados correctamente en la tabla 'glosario'.")
     except Exception as e:
         st.write("Error al insertar datos en la base de datos:", e)
 
-
 # Streamlit
-st.title("Carga de datos en la colección 'glosario' de Firebase")
+st.title("Carga de datos en la tabla 'glosario' de MySQL")
 
 # Widget para cargar el archivo Excel
 file = st.file_uploader("Cargar archivo Excel", type=["xlsx"])
@@ -49,8 +66,8 @@ if file:
         st.write("Datos cargados desde el archivo Excel:")
         st.write(df_excel)
 
-        # Botón para insertar el DataFrame en la colección "glosario"
-        if st.button("Insertar en la colección 'glosario'"):
+        # Botón para insertar el DataFrame en la tabla "glosario"
+        if st.button("Insertar en la tabla 'glosario'"):
             insert_dataframe_to_db(df_excel)
     except Exception as e:
         st.write("Error al leer el archivo Excel:", e)
