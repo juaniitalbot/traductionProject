@@ -52,9 +52,14 @@ def main():
 
         sentences = separate_sentences(full_text)
 
-        
+        # Create a dictionary to store sentences and their corresponding text areas
+        sentence_text_areas = {}
+
         for i, sentence in enumerate(sentences):
             col1.write(sentence)
+
+            # Add a text area for each sentence
+            sentence_text_areas[i] = col2.text_area(f"Oración {i + 1}:", sentence, height=100)
 
             # Dividir la oración en palabras y eliminar signos de puntuación
             words = re.findall(r'\b\w+\b', sentence)
@@ -86,13 +91,15 @@ def main():
                     col1.write(translation)
                 col1.markdown('----')
 
+        # ... (rest of the processing remains unchanged) ...
+
     # Cerramos la conexión a la base de datos
     conn.close()
 
     # Estilo para mejorar la apariencia visual de la columna de edición
     col2.markdown('<style>div.row-widget.stRadio > div{flex-direction:column;} </style>', unsafe_allow_html=True)
 
-    edited_text = col2.text_area("Campo de traducción: ", height=500)  # Ajustar la altura del campo de texto
+    edited_text = col2.text_area("Campo de traducción:", height=500)  # Ajustar la altura del campo de texto
 
     # Botón para guardar como Word
     if col2.button("Guardar como Word"):
