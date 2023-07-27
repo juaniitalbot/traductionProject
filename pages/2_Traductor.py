@@ -59,7 +59,7 @@ def main():
             col1.write(sentence)
 
             # Add a text area for each sentence
-            sentence_text_areas[i] = col2.text_area(f"Oración {i + 1}:", sentence, height=100)
+            sentence_text_areas[i] = col2.text_area(f"Oración {i + 1}:", height=100)
 
             # Dividir la oración en palabras y eliminar signos de puntuación
             words = re.findall(r'\b\w+\b', sentence)
