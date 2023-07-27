@@ -99,13 +99,6 @@ def main():
     # Estilo para mejorar la apariencia visual de la columna de edición
     col2.markdown('<style>div.row-widget.stRadio > div{flex-direction:column;} </style>', unsafe_allow_html=True)
 
-    edited_text = col2.text_area("Campo de traducción:", height=500)  # Ajustar la altura del campo de texto
-
-    # Botón para guardar como Word
-    if col2.button("Guardar como Word"):
-        doc = Document()
-        doc.add_paragraph(edited_text)
-        col2.markdown(get_binary_file_downloader_html(doc, "documento_editado.docx"), unsafe_allow_html=True)
 
 def get_binary_file_downloader_html(bin_file, file_label='File'):
     with open(bin_file, 'rb') as f:
